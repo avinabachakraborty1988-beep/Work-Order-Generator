@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary-blue: #0052CC;
+  --primary-blue-dark: #003D99;
+  --primary-blue-light: #0065FF;
+  --primary-blue-alpha: rgba(0, 82, 204, 0.08);
+  --accent-green: #00875A;
+  --accent-green-light: #36B37E;
+  --accent-red: #DE350B;
+  --accent-orange: #FF8B00;
+  --accent-purple: #6554C0;
+  --gray-50: #FAFBFC;
+  --gray-100: #F4F5F7;
+  --gray-200: #EBECF0;
+  --gray-300: #DFE1E6;
+  --gray-400: #C1C7D0;
+  --gray-500: #8993A4;
+  --gray-600: #6B778C;
+  --gray-700: #505F79;
+  --gray-800: #42526E;
+  --gray-900: #253858;
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-sm: 0 1px 2px rgba(37, 56, 88, 0.08);
+  --shadow-md: 0 4px 8px rgba(37, 56, 88, 0.12);
+  --shadow-lg: 0 8px 24px rgba(37, 56, 88, 0.15);
+  --shadow-xl: 0 16px 48px rgba(37, 56, 88, 0.2);
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-primary);
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+  color: var(--gray-900);
+  line-height: 1.6;
+  padding: var(--space-xl) var(--space-md);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  animation: slideIn 0.4s var(--transition-base);
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.header-wrapper {
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%);
+  padding: var(--space-2xl) var(--space-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.header-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+
+.header-content { position: relative; z-index: 1; }
+
+.company-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.logo-icon {
+  width: 56px; height: 56px;
+  background: white;
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--primary-blue);
+  box-shadow: var(--shadow-md);
+}
+
+.company-name { display: flex; flex-direction: column; gap: var(--space-xs); }
+.company-name h1 { font-size: 28px; font-weight: 700; color: white; letter-spacing: 0.5px; margin: 0; line-height: 1.2; }
+.company-name .subtitle { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); letter-spacing: 2px; text-transform: uppercase; }
+.form-title { font-size: 20px; font-weight: 600; color: white; margin-top: var(--space-lg); opacity: 0.95; }
+
+.mode-toggle-section { background: rgba(255,255,255,0.15); padding: var(--space-md); border-radius: var(--radius-md); margin-top: var(--space-lg); }
+.mode-toggle { display: flex; gap: var(--space-md); align-items: center; }
+.mode-toggle label { color: white; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: var(--space-sm); cursor: pointer; padding: var(--space-sm) var(--space-md); border-radius: var(--radius-sm); transition: background var(--transition-fast); }
+.mode-toggle label:hover { background: rgba(255,255,255,0.1); }
+.mode-toggle input[type="radio"] { cursor: pointer; width: 18px; height: 18px; }
+
+.revision-selector { margin-top: var(--space-md); display: none; }
+.revision-selector.active { display: block; }
+.revision-selector label { display: block; color: white; font-weight: 600; margin-bottom: var(--space-xs); font-size: 14px; }
+.revision-selector select { width: 100%; padding: var(--space-sm) var(--space-md); font-size: 14px; border: 2px solid rgba(255,255,255,0.3); border-radius: var(--radius-sm); background: rgba(255,255,255,0.95); color: var(--gray-900); cursor: pointer; }
+
+.load-order-btn { margin-top: var(--space-sm); padding: var(--space-sm) var(--space-lg); background: var(--accent-green); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; font-size: 14px; cursor: pointer; transition: all var(--transition-fast); }
+.load-order-btn:hover { background: var(--accent-green-light); transform: translateY(-2px); }
+.load-order-btn:disabled { background: var(--gray-400); cursor: not-allowed; transform: none; }
+
+.form-content { padding: var(--space-xl); }
+
+.section { margin-bottom: var(--space-2xl); animation: fadeIn 0.5s var(--transition-base); animation-fill-mode: both; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.section-title {
+  font-size: 18px; font-weight: 700; color: var(--gray-900);
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-sm);
+  border-bottom: 3px solid var(--primary-blue);
+  display: flex; align-items: center; gap: var(--space-sm);
+}
+
+.section-title::before { content: ''; width: 6px; height: 24px; background: var(--primary-blue); border-radius: 3px; }
+
+.section-number {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px;
+  background: var(--primary-blue-alpha); color: var(--primary-blue);
+  border-radius: 50%; font-size: 14px; font-weight: 700; margin-right: var(--space-xs);
+}
+
+.form-row { display: grid; gap: var(--space-lg); margin-bottom: var(--space-lg); }
+.form-row.customer-row { grid-template-columns: 2fr 1fr 2fr; }
+.form-row.two-col { grid-template-columns: repeat(2, 1fr); }
+.form-row.three-col { grid-template-columns: repeat(3, 1fr); }
+.form-row.four-col { grid-template-columns: repeat(4, 1fr); }
+
+.form-field { display: flex; flex-direction: column; gap: var(--space-xs); min-width: 0; }
+.form-field.full-width { grid-column: 1 / -1; }
+
+.form-field label { font-weight: 600; font-size: 13px; color: var(--gray-700); letter-spacing: 0.3px; }
+.form-field label .required { color: var(--accent-red); margin-left: 2px; }
+
+.form-field input[type="text"],
+.form-field input[type="date"],
+.form-field input[type="number"],
+.form-field select,
+.form-field textarea {
+  padding: 12px 14px;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-family: var(--font-primary);
+  color: var(--gray-900);
+  transition: all var(--transition-fast);
+  background: white;
+}
+
+.form-field input[type="text"]:focus,
+.form-field input[type="date"]:focus,
+.form-field input[type="number"]:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px var(--primary-blue-alpha);
+}
+
+.form-field input[type="text"]:disabled,
+.form-field input[type="number"]:disabled,
+.form-field textarea:disabled {
+  background: var(--gray-100);
+  color: var(--gray-500);
+  cursor: not-allowed;
+}
+
+.form-field select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23505F79' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+.form-field textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+.form-field input::placeholder, .form-field textarea::placeholder { color: var(--gray-400); }
+
+/* Inline combo: dropdown + text side by side */
+.delivery-terms-combo {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+}
+.delivery-terms-combo select { flex: 1; }
+.delivery-terms-combo input[type="text"] { flex: 1; }
+
+/* Checkbox inline row */
+.checkbox-inline-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+.checkbox-inline-row label { font-weight: 600; font-size: 13px; color: var(--gray-700); }
+.checkbox-inline-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary-blue); }
+
+/* CD Clause row */
+.cd-clause-wrapper { display: flex; flex-direction: column; gap: var(--space-sm); }
+.cd-clause-top { display: flex; align-items: center; gap: var(--space-sm); }
+.cd-clause-top label { font-weight: 600; font-size: 13px; color: var(--gray-700); }
+.cd-clause-bottom { display: flex; align-items: center; gap: var(--space-sm); flex-wrap: wrap; }
+.cd-clause-bottom input[type="text"] { width: 100px; padding: 8px 12px; border: 2px solid var(--gray-200); border-radius: var(--radius-md); font-size: 14px; background: white; color: var(--gray-900); transition: all var(--transition-fast); }
+.cd-clause-bottom input[type="text"]:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px var(--primary-blue-alpha); }
+.cd-clause-bottom span { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.cd-clause-bottom input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary-blue); }
+
+.inline-button { margin-top: auto; padding: 12px 20px; background: var(--primary-blue); color: white; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 14px; cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
+.inline-button:hover { background: var(--primary-blue-dark); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+.new-customer-toggle { margin-top: var(--space-md); }
+.new-customer-toggle button { background: var(--accent-green); padding: 10px 20px; border: none; border-radius: var(--radius-sm); color: white; font-weight: 600; font-size: 13px; cursor: pointer; transition: all var(--transition-fast); }
+.new-customer-toggle button:hover { background: var(--accent-green-light); transform: translateY(-2px); }
+
+.new-customer-section { display: none; margin-top: var(--space-lg); padding: var(--space-lg); background: var(--gray-50); border-radius: var(--radius-lg); border: 2px dashed var(--gray-300); }
+.new-customer-section.active { display: block; }
+.new-customer-section h3 { font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: var(--space-md); }
+
+.add-cust-btn { margin-top: var(--space-md); padding: 10px 24px; background: var(--accent-green); color: white; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 14px; cursor: pointer; transition: all var(--transition-fast); }
+.add-cust-btn:hover { background: var(--accent-green-light); transform: translateY(-2px); }
+.add-cust-btn:disabled { background: var(--gray-400); cursor: not-allowed; transform: none; }
+
+.work-order-info { display: flex; align-items: center; gap: var(--space-md); padding: var(--space-md); background: var(--primary-blue-alpha); border-radius: var(--radius-lg); border-left: 4px solid var(--primary-blue); margin-bottom: var(--space-lg); }
+.work-order-info-label { font-weight: 700; font-size: 14px; color: var(--gray-700); }
+.work-order-info-value { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--primary-blue); background: white; padding: var(--space-xs) var(--space-md); border-radius: var(--radius-sm); }
+
+.checkbox-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-sm); padding: var(--space-md); background: var(--gray-50); border-radius: var(--radius-md); }
+.checkbox-item { display: flex; align-items: center; gap: var(--space-sm); padding: var(--space-sm); border-radius: var(--radius-sm); transition: background var(--transition-fast); }
+.checkbox-item:hover { background: white; }
+.checkbox-item input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary-blue); }
+.checkbox-item label { font-size: 14px; font-weight: 500; color: var(--gray-800); cursor: pointer; user-select: none; }
+
+/* Same as above row for consignee */
+.same-as-above-row { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-md); padding: var(--space-sm) var(--space-md); background: var(--gray-50); border-radius: var(--radius-md); border: 1px solid var(--gray-200); }
+.same-as-above-row label { font-weight: 600; font-size: 13px; color: var(--gray-700); cursor: pointer; }
+.same-as-above-row input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary-blue); }
+
+.product-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg); }
+.add-product-btn { padding: 12px 24px; background: var(--accent-purple); color: white; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 14px; cursor: pointer; transition: all var(--transition-fast); display: flex; align-items: center; gap: var(--space-sm); }
+.add-product-btn:hover { background: #7B68EE; transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.add-product-btn::before { content: '+'; font-size: 20px; font-weight: 700; }
+
+.product-container { display: flex; flex-direction: column; gap: var(--space-lg); }
+.product-card { background: var(--gray-50); border: 2px solid var(--gray-200); border-radius: var(--radius-lg); padding: var(--space-lg); transition: all var(--transition-base); }
+.product-card:hover { border-color: var(--primary-blue-light); box-shadow: var(--shadow-md); }
+.product-header { display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); padding-bottom: var(--space-md); border-bottom: 2px solid var(--gray-300); }
+.product-number { width: 36px; height: 36px; background: linear-gradient(135deg, var(--accent-purple), #7B68EE); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px; }
+.product-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
+
+.submit-section { margin-top: var(--space-2xl); padding-top: var(--space-2xl); border-top: 2px solid var(--gray-200); display: flex; justify-content: center; }
+.submit-btn { background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-dark) 100%); color: white; border: none; padding: 16px 48px; font-size: 16px; font-weight: 700; border-radius: var(--radius-lg); cursor: pointer; transition: all var(--transition-base); box-shadow: var(--shadow-lg); letter-spacing: 0.5px; text-transform: uppercase; position: relative; overflow: hidden; }
+.submit-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.5s; }
+.submit-btn:hover::before { left: 100%; }
+.submit-btn:hover { transform: translateY(-3px); box-shadow: var(--shadow-xl); }
+.submit-btn:active { transform: translateY(-1px); }
+.submit-btn:disabled { background: var(--gray-400); cursor: not-allowed; transform: none; box-shadow: var(--shadow-sm); }
+
+/* MODALS */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; animation: fadeInOverlay 0.3s ease; }
+.modal-overlay.active { display: flex; align-items: center; justify-content: center; }
+@keyframes fadeInOverlay { from { opacity: 0; } to { opacity: 1; } }
+.pdf-modal { background: white; border-radius: var(--radius-xl); padding: var(--space-2xl); box-shadow: var(--shadow-xl); max-width: 560px; width: 90%; animation: slideInModal 0.3s var(--transition-base); }
+@keyframes slideInModal { from { opacity: 0; transform: translateY(-50px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.pdf-modal-icon { width: 64px; height: 64px; margin: 0 auto var(--space-lg); background: var(--primary-blue-alpha); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+.pdf-modal-title { font-size: 22px; font-weight: 700; color: var(--gray-900); text-align: center; margin-bottom: var(--space-sm); }
+.pdf-modal-message { font-size: 14px; color: var(--gray-600); text-align: center; margin-bottom: var(--space-xl); line-height: 1.6; }
+/* Rate choice cards */
+.rate-choice-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-bottom: var(--space-lg); }
+.rate-choice-card { border: 2px solid var(--gray-200); border-radius: var(--radius-lg); padding: var(--space-lg) var(--space-md); text-align: center; cursor: pointer; transition: all var(--transition-fast); background: white; user-select: none; }
+.rate-choice-card:hover { border-color: var(--primary-blue); background: var(--primary-blue-alpha); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.rate-choice-card.with-rate.selected { border-color: var(--accent-green); background: rgba(0,135,90,0.07); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.rate-choice-card.without-rate.selected { border-color: var(--accent-purple); background: rgba(101,84,192,0.07); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.rate-choice-card.skip-pdf.selected { border-color: var(--gray-500); background: var(--gray-100); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.rate-choice-icon { font-size: 30px; margin-bottom: var(--space-sm); }
+.rate-choice-label { font-size: 13px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+.rate-choice-desc { font-size: 11px; color: var(--gray-500); line-height: 1.4; }
+.pdf-confirm-row { display: flex; gap: var(--space-md); justify-content: center; margin-top: var(--space-sm); }
+.pdf-modal-btn { padding: 13px 28px; border: none; border-radius: var(--radius-md); font-weight: 600; font-size: 14px; cursor: pointer; transition: all var(--transition-fast); min-width: 110px; }
+.pdf-modal-btn-primary { background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark)); color: white; }
+.pdf-modal-btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.pdf-modal-btn-secondary { background: var(--gray-200); color: var(--gray-800); }
+.pdf-modal-btn-secondary:hover { background: var(--gray-300); transform: translateY(-2px); }
+.pdf-modal-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none !important; }
+/* compat */
+.pdf-modal-btn-yes { background: var(--accent-green); color: white; }
+.pdf-modal-btn-yes:hover { background: var(--accent-green-light); transform: translateY(-2px); }
+.pdf-modal-btn-no { background: var(--gray-200); color: var(--gray-800); }
+.pdf-modal-btn-no:hover { background: var(--gray-300); transform: translateY(-2px); }
+
+@media (max-width: 1024px) {
+  .form-row.customer-row { grid-template-columns: 1fr; }
+  .form-row.three-col, .form-row.four-col { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  body { padding: var(--space-md) var(--space-sm); }
+  .form-content { padding: var(--space-lg); }
+  .header-wrapper { padding: var(--space-xl) var(--space-lg); }
+  .company-name h1 { font-size: 22px; }
+  .form-row, .form-row.customer-row, .form-row.two-col, .form-row.three-col, .form-row.four-col { grid-template-columns: 1fr; }
+  .checkbox-grid { grid-template-columns: 1fr; }
+  .delivery-terms-combo { flex-wrap: wrap; }
+  .pdf-modal-buttons { flex-direction: column; }
+  .pdf-modal-btn { width: 100%; }
+}
+
+.hidden { display: none !important; }
+#allProductsJSON, #isRevision, #oldOrderId, #oldWorkOrderNo { display: none; }
+</style>
+</head>
+
+<body>
+<!-- PRINT OPTIONS MODAL -->
+<div class="modal-overlay" id="pdfModal">
+  <div class="pdf-modal">
+    <div class="pdf-modal-icon">🖨️</div>
+    <h2 class="pdf-modal-title">Work Order Options</h2>
+    <p class="pdf-modal-message">Select what you'd like to do with this work order.</p>
+
+    <div class="rate-choice-grid" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="rate-choice-card with-rate" id="cardDraft" onclick="selectRateOption('draft')">
+        <div class="rate-choice-icon">📝</div>
+        <div class="rate-choice-label">Print Draft</div>
+        <div class="rate-choice-desc">Preview Office Copy for review — not saved to Drive, form stays open</div>
+      </div>
+      <div class="rate-choice-card without-rate" id="cardApproved" onclick="selectRateOption('approved')">
+        <div class="rate-choice-icon">✅</div>
+        <div class="rate-choice-label">Print Approved</div>
+        <div class="rate-choice-desc">Saves to sheet &amp; Drive — combined Office Copy + Factory Copy PDF</div>
+      </div>
+      <div class="rate-choice-card skip-pdf" id="cardSkip" onclick="selectRateOption('skip')">
+        <div class="rate-choice-icon">💾</div>
+        <div class="rate-choice-label">Save Only</div>
+        <div class="rate-choice-desc">Save to sheet only — no PDF generated</div>
+      </div>
+    </div>
+
+    <div class="pdf-confirm-row">
+      <button class="pdf-modal-btn pdf-modal-btn-primary" id="pdfConfirmBtn" onclick="handlePDFConfirmation()" disabled>
+        Confirm &amp; Proceed
+      </button>
+      <button class="pdf-modal-btn pdf-modal-btn-secondary" id="pdfCancelBtn" onclick="cancelPDFModal()">
+        Cancel
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="header-wrapper">
+    <div class="header-content">
+      <div class="company-logo">
+        <div class="logo-icon">IC</div>
+        <div class="company-name">
+          <h1>INDIAN CHAIN</h1>
+          <span class="subtitle">PRIVATE LIMITED</span>
+        </div>
+      </div>
+      <div class="form-title">Work Order Generator</div>
+      <div class="mode-toggle-section">
+        <div class="mode-toggle">
+          <label>
+            <input type="radio" name="formMode" value="new" checked onchange="toggleFormMode()">
+            New Work Order
+          </label>
+          <label>
+            <input type="radio" name="formMode" value="revise" onchange="toggleFormMode()">
+            Revise/Amend Work Order
+          </label>
+        </div>
+        <div class="revision-selector" id="revisionSelector">
+          <label>Select Work Order to Revise:</label>
+          <select id="workOrderReviseSelect">
+            <option value="" disabled selected>Loading work orders...</option>
+          </select>
+          <button type="button" class="load-order-btn" onclick="loadWorkOrderForRevision()">Load Work Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-content">
+    <form id="workOrderForm" onsubmit="handleFormSubmit(this); return false;">
+
+      <!-- Hidden fields -->
+      <input type="hidden" id="isRevision" name="isRevision" value="false">
+      <input type="hidden" id="oldOrderId" name="oldOrderId" value="">
+      <input type="hidden" id="oldWorkOrderNo" name="oldWorkOrderNo" value="">
+      <input type="hidden" id="allProductsJSON" name="allProductsJSON">
+
+      <!-- SECTION 1: CUSTOMER INFORMATION -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">1</span>
+          Customer Information
+        </div>
+
+        <div class="form-row customer-row">
+          <div class="form-field">
+            <label>Customer Name <span class="required">*</span></label>
+            <select id="customerSelect" name="customerName" onchange="updateCustomerInfo()" required>
+              <option value="" disabled selected>Select Customer</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>GST Number</label>
+            <input type="text" id="customerGst" name="customerGst" placeholder="Enter GST Number">
+          </div>
+          <div class="form-field">
+            <label>Address</label>
+            <textarea id="customerAddress" name="customerAddress" placeholder="Enter Address" rows="1"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row four-col">
+          <div class="form-field">
+            <label>Contact Name</label>
+            <input type="text" id="customerContactName" name="customerContactName" placeholder="Contact person name">
+          </div>
+          <div class="form-field">
+            <label>Contact No.</label>
+            <input type="text" id="customerContactNo" name="customerContactNo" placeholder="Contact number">
+          </div>
+          <div class="form-field">
+            <label>Email</label>
+            <input type="text" id="customerEmail" name="customerEmail" placeholder="Email address">
+          </div>
+          <div class="form-field">
+            <label>Email CC</label>
+            <input type="text" id="customerEmailCC" name="customerEmailCC" placeholder="CC email address">
+          </div>
+        </div>
+
+        <div class="new-customer-toggle">
+          <button type="button" onclick="toggleNewCustomerForm()">+ Add New Customer to Database</button>
+        </div>
+
+        <div class="new-customer-section" id="newCustomerSection">
+          <h3>New Customer Details</h3>
+          <div class="form-row three-col">
+            <div class="form-field">
+              <label>Customer Name</label>
+              <input type="text" id="newCustName" placeholder="Enter name">
+            </div>
+            <div class="form-field">
+              <label>GST Number</label>
+              <input type="text" id="newCustGST" placeholder="Enter GST">
+            </div>
+            <div class="form-field">
+              <label>Address</label>
+              <input type="text" id="newCustAddress" placeholder="Enter address">
+            </div>
+          </div>
+          <div class="form-row four-col">
+            <div class="form-field">
+              <label>Contact Name</label>
+              <input type="text" id="newCustContactName" placeholder="Contact person name">
+            </div>
+            <div class="form-field">
+              <label>Contact No.</label>
+              <input type="text" id="newCustContactNo" placeholder="Contact number">
+            </div>
+            <div class="form-field">
+              <label>Email</label>
+              <input type="text" id="newCustEmail" placeholder="Email address">
+            </div>
+            <div class="form-field">
+              <label>Email CC</label>
+              <input type="text" id="newCustEmailCC" placeholder="CC email address">
+            </div>
+          </div>
+          <button type="button" class="add-cust-btn" onclick="addNewCustomer()">Add to Database</button>
+        </div>
+      </div>
+
+      <!-- SECTION 2: WORK ORDER DETAILS (removed Offer No., Product Source, Certification Type, Inspection Type) -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">2</span>
+          Work Order Details
+        </div>
+
+        <div class="work-order-info">
+          <span class="work-order-info-label">Work Order Number:</span>
+          <span class="work-order-info-value" id="workOrderNumberDisplay">------</span>
+          <div class="form-field" style="margin-left:auto; min-width:200px;">
+            <label style="color:var(--gray-700); font-size:13px; font-weight:600;">Work Order Date</label>
+            <input type="date" name="workOrderDate" style="padding:8px 12px; border:2px solid var(--gray-200); border-radius:var(--radius-md); font-size:14px; font-family:var(--font-primary); background:white; color:var(--gray-900);">
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>PO No.</label>
+            <input type="text" name="poNo">
+          </div>
+          <div class="form-field">
+            <label>PO Date</label>
+            <input type="date" name="poDate">
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>LOI No.</label>
+            <input type="text" name="loiNo">
+          </div>
+          <div class="form-field">
+            <label>LOI Date</label>
+            <input type="date" name="loiDate">
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 3: DELIVERY INFORMATION (revised) -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">3</span>
+          Delivery Information
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>Delivery Date</label>
+            <input type="date" name="deliveryDate">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field full-width">
+            <label>Terms of Delivery</label>
+            <div class="delivery-terms-combo">
+              <select name="deliveryTerms" id="deliveryTermsSelect">
+                <option value="FOR">FOR</option>
+                <option value="EX-Works">EX-Works</option>
+                <option value="FOB">FOB</option>
+                <option value="CIF">CIF</option>
+                <option value="Free Delivery">Free Delivery</option>
+              </select>
+              <input type="text" name="deliveryTermsExtra" id="deliveryTermsExtra" placeholder="Additional details...">
+            </div>
+          </div>
+        </div>
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>Nominated Transporter</label>
+            <input type="text" name="nominatedTransporter" placeholder="Enter nominated transporter">
+          </div>
+          <div class="form-field">
+            <label>Transporter Scope</label>
+            <select name="transporterScope">
+              <option value="Indian Chain">Indian Chain</option>
+              <option value="Customer">Customer</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 4: CONSIGNEE INFORMATION -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">4</span>
+          Consignee Information
+        </div>
+
+        <div class="same-as-above-row">
+          <input type="checkbox" id="sameAsAbove" onchange="toggleSameAsAbove()">
+          <label for="sameAsAbove">Same as above (copy from Customer Information)</label>
+        </div>
+
+        <div class="form-row three-col">
+          <div class="form-field">
+            <label>Company Name</label>
+            <input type="text" id="consigneeCompany" name="consigneeCompany" placeholder="Enter company name">
+          </div>
+          <div class="form-field">
+            <label>Address</label>
+            <input type="text" id="consigneeAddr" name="consigneeAddr" placeholder="Enter address">
+          </div>
+          <div class="form-field">
+            <label>GSTIN</label>
+            <input type="text" id="consigneeGstin" name="consigneeGstin" placeholder="Enter GSTIN">
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>Contact Person</label>
+            <input type="text" name="consigneeContact" placeholder="Enter contact person name">
+          </div>
+          <div class="form-field">
+            <label>Contact Number</label>
+            <input type="text" name="consigneePhone" placeholder="Enter contact number">
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 5: TERMS & CONDITIONS -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">5</span>
+          Terms &amp; Conditions
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>Payment Terms</label>
+            <select name="paymentTerms" id="paymentTermsSelect" onchange="toggleAdvanceField()">
+              <option value="Credit/Direct">Credit/Direct</option>
+              <option value="Against Proforma Invoice">Against Proforma Invoice</option>
+              <option value="Advance & Balance Against Proforma Invoice">Advance &amp; Balance Against Proforma Invoice</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Advance %</label>
+            <input type="number" id="advancePercent" name="advancePercent" placeholder="Enter advance %" min="0" max="100" disabled style="background:var(--gray-100);">
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>Guarantee Period (months)</label>
+            <input type="text" name="guaranteePeriod" placeholder="e.g. 12">
+          </div>
+          <div class="form-field">
+            <label>Guarantee Clause</label>
+            <textarea name="guaranteeClause" placeholder="Enter guarantee clause details..." rows="2"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field full-width">
+            <label>Bank Guarantee</label>
+            <div class="form-row four-col" style="margin-bottom:0;">
+              <div class="form-field">
+                <label>Security %</label>
+                <input type="number" name="bgSecurityPct" placeholder="e.g. 10" min="0" max="100" step="0.01">
+              </div>
+              <div class="form-field">
+                <label>Security Validity Date</label>
+                <input type="date" name="bgSecurityDate">
+              </div>
+              <div class="form-field">
+                <label>Performance %</label>
+                <input type="number" name="bgPerformancePct" placeholder="e.g. 5" min="0" max="100" step="0.01">
+              </div>
+              <div class="form-field">
+                <label>Performance Validity Date</label>
+                <input type="date" name="bgPerformanceDate">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field full-width">
+            <label>LD Clause</label>
+            <div class="cd-clause-wrapper">
+              <div class="cd-clause-top">
+                <input type="checkbox" id="cdApplicable" name="cdApplicable" value="Applicable" onchange="toggleCDClause()">
+                <label for="cdApplicable" style="font-weight:500; font-size:14px; color:var(--gray-800); cursor:pointer;">Applicable</label>
+              </div>
+              <div class="cd-clause-bottom">
+                <input type="text" id="cdValue" name="cdValue" placeholder="Value" disabled>
+                <span>% Per Week</span>
+                <input type="checkbox" id="cdPerWeek" name="cdPeriod" value="Per Week" disabled>
+                <span>% Per Month</span>
+                <input type="checkbox" id="cdPerMonth" name="cdPeriod" value="Per Month" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 6: INSPECTION -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">6</span>
+          Inspection
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label>PDI</label>
+            <select name="pdi">
+              <option value="">-- Select PDI --</option>
+              <option value="Class">Class</option>
+              <option value="Customer">Customer</option>
+              <option value="TPI">TPI</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Additional PDI Details</label>
+            <input type="text" name="pdiNote" placeholder="Enter additional PDI details...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field full-width">
+            <label>Certification</label>
+            <div style="display:flex; flex-wrap:nowrap; gap:var(--space-lg); align-items:center; padding:var(--space-md); background:var(--gray-50); border-radius:var(--radius-md);">
+              <div class="checkbox-item" style="white-space:nowrap;">
+                <input type="checkbox" name="certifications" value="IRS" id="cert1">
+                <label for="cert1">IRS</label>
+              </div>
+              <div class="checkbox-item" style="white-space:nowrap;">
+                <input type="checkbox" name="certifications" value="ABS" id="cert2">
+                <label for="cert2">ABS</label>
+              </div>
+              <div class="checkbox-item" style="white-space:nowrap;">
+                <input type="checkbox" name="certifications" value="BV" id="cert3">
+                <label for="cert3">BV</label>
+              </div>
+              <div class="checkbox-item" style="white-space:nowrap;">
+                <input type="checkbox" name="certifications" value="LR" id="cert4">
+                <label for="cert4">LR</label>
+              </div>
+              <div class="checkbox-item" style="white-space:nowrap;">
+                <input type="checkbox" name="certifications" value="DNV" id="cert5">
+                <label for="cert5">DNV</label>
+              </div>
+              <div class="checkbox-item" style="white-space:nowrap;">
+                <input type="checkbox" name="certifications" value="IACS" id="cert6">
+                <label for="cert6">IACS</label>
+              </div>
+              <div class="checkbox-item" style="white-space:nowrap;">
+                <input type="checkbox" name="certifications" value="RINA" id="cert7">
+                <label for="cert7">RINA</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 7: PRODUCTS -->
+      <div class="section">
+        <div class="product-section-header">
+          <div class="section-title" style="margin-bottom:0; border-bottom:none;">
+            <span class="section-number">7</span>
+            Product Details
+          </div>
+          <button type="button" class="add-product-btn" onclick="addProductRow()">Add Product</button>
+        </div>
+        <div class="product-container" id="productContainer"></div>
+      </div>
+
+      <!-- SECTION 8: ADDITIONAL INFORMATION -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">8</span>
+          Additional Information
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Documents Enclosed</label>
+            <div class="checkbox-grid">
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsEnclosed" value="Order Copy" id="doc1">
+                <label for="doc1">Order Copy</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsEnclosed" value="Drawing" id="doc2">
+                <label for="doc2">Drawing</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsEnclosed" value="Specification" id="doc3">
+                <label for="doc3">Specification</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsEnclosed" value="QAP" id="doc4">
+                <label for="doc4">QAP</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label>Approval Required</label>
+            <div class="checkbox-grid">
+              <div class="checkbox-item">
+                <input type="checkbox" name="approvalReq" value="Drawing" id="app1">
+                <label for="app1">Drawing</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="approvalReq" value="Specification" id="app2">
+                <label for="app2">Specification</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="approvalReq" value="Sample" id="app3">
+                <label for="app3">Sample</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="text" name="sampleQty" placeholder="Sample qty" style="width:120px; padding:8px 10px; border:2px solid var(--gray-200); border-radius:var(--radius-md); font-size:13px; font-family:var(--font-primary); color:var(--gray-900); background:white;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field full-width">
+            <label>Note</label>
+            <textarea name="additionalNote" placeholder="Enter any additional notes..." rows="3"></textarea>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SECTION 9: DOCUMENTS TO BE SENT WITH MATERIAL -->
+      <div class="section">
+        <div class="section-title">
+          <span class="section-number">9</span>
+          Documents To Be Sent With Material
+        </div>
+
+        <div class="form-row">
+          <div class="form-field full-width">
+            <div class="checkbox-grid">
+
+              <!-- Always-checked, locked -->
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Invoice" id="dwm_invoice" checked onclick="return false;" style="cursor:not-allowed; accent-color:var(--accent-green);">
+                <label for="dwm_invoice" style="color:var(--accent-green); font-weight:600;">Invoice ✓</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Packing List" id="dwm_packing" checked onclick="return false;" style="cursor:not-allowed; accent-color:var(--accent-green);">
+                <label for="dwm_packing" style="color:var(--accent-green); font-weight:600;">Packing List ✓</label>
+              </div>
+
+              <!-- Regular checkboxes -->
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="TC" id="dwm_tc">
+                <label for="dwm_tc">TC</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="GC" id="dwm_gc">
+                <label for="dwm_gc">GC</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Fitment Certificate" id="dwm_fitment">
+                <label for="dwm_fitment">Fitment Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Weight Certificate" id="dwm_weight">
+                <label for="dwm_weight">Weight Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Interchangeability Certificate" id="dwm_interchg">
+                <label for="dwm_interchg">Interchangeability Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Chemical Certificate" id="dwm_chem">
+                <label for="dwm_chem">Chemical Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="NABL (Load Test) Certificate" id="dwm_nabl_load">
+                <label for="dwm_nabl_load">NABL (Load Test) Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="NABL (Chemical) Certificate" id="dwm_nabl_chem">
+                <label for="dwm_nabl_chem">NABL (Chemical) Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Competency Certificate" id="dwm_comp">
+                <label for="dwm_comp">Competency Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Dock Safety Certificate" id="dwm_dock">
+                <label for="dwm_dock">Dock Safety Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Preservation/Packing Certificate" id="dwm_pres">
+                <label for="dwm_pres">Preservation/Packing Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Painting Certificate" id="dwm_paint">
+                <label for="dwm_paint">Painting Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Certificate of Origin" id="dwm_origin">
+                <label for="dwm_origin">Certificate of Origin</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="Galvanizing Certificate" id="dwm_galv">
+                <label for="dwm_galv">Galvanizing Certificate</label>
+              </div>
+              <div class="checkbox-item">
+                <input type="checkbox" name="docsWithMaterial" value="TPI/PDI/Inspection Documents" id="dwm_tpi">
+                <label for="dwm_tpi">TPI/PDI/Inspection Documents</label>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div class="submit-section">
+        <button type="submit" class="submit-btn">Generate Work Order</button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+  let customerDatabase = [];
+  let productListData = {};  // holds all fetched product lists
+  let productCount = 0;
+  let nextWorkOrderNumber = '';
+  let allWorkOrders = [];
+  let isRevisionMode = false;
+  let pendingFormData = null;
+
+  // INITIALIZE
+  window.onload = function() {
+    google.script.run.withSuccessHandler(populateDropdowns).getCustomerData();
+    google.script.run.withSuccessHandler(function(woNumber) {
+      nextWorkOrderNumber = woNumber;
+      document.getElementById('workOrderNumberDisplay').textContent = woNumber;
+    }).getNextWorkOrderNumber();
+    google.script.run.withSuccessHandler(populateWorkOrderDropdown).getAllWorkOrderNumbers();
+    google.script.run.withSuccessHandler(function(data) {
+      productListData = data;
+      addProductRow();
+    }).getProductListData();
+    // Permanently checked docs
+    const inv = document.getElementById('dwm_invoice');
+    const pack = document.getElementById('dwm_packing');
+    if (inv) inv.checked = true;
+    if (pack) pack.checked = true;
+  };
+
+  // POPULATE CUSTOMER DROPDOWN (single select, no consignee select anymore)
+  function populateDropdowns(data) {
+    customerDatabase = data;
+    const custSelect = document.getElementById("customerSelect");
+    custSelect.innerHTML = '<option value="" disabled selected>Select Customer</option>';
+    data.forEach(client => {
+      let opt = document.createElement("option");
+      opt.value = client.name;
+      opt.text = client.name;
+      custSelect.add(opt);
+    });
+  }
+
+  // POPULATE WORK ORDER DROPDOWN
+  function populateWorkOrderDropdown(data) {
+    allWorkOrders = data;
+    const select = document.getElementById('workOrderReviseSelect');
+    if (data.length === 0) {
+      select.innerHTML = '<option value="" disabled selected>No work orders found</option>';
+      return;
+    }
+    select.innerHTML = '<option value="" disabled selected>Select a work order</option>';
+    data.forEach(wo => {
+      let opt = document.createElement('option');
+      opt.value = wo.workOrderNo;
+      opt.text = wo.workOrderNo + ' (Order ID: ' + wo.orderId + ')';
+      opt.dataset.orderId = wo.orderId;
+      select.add(opt);
+    });
+  }
+
+  // TOGGLE FORM MODE
+  function toggleFormMode() {
+    const mode = document.querySelector('input[name="formMode"]:checked').value;
+    const revisionSection = document.getElementById('revisionSelector');
+    const submitBtn = document.querySelector('.submit-btn');
+    if (mode === 'revise') {
+      revisionSection.classList.add('active');
+      isRevisionMode = true;
+      submitBtn.textContent = 'Update Work Order';
+    } else {
+      revisionSection.classList.remove('active');
+      isRevisionMode = false;
+      submitBtn.textContent = 'Generate Work Order';
+      resetFormToNewOrder();
+    }
+  }
+
+  // LOAD WORK ORDER FOR REVISION
+  function loadWorkOrderForRevision() {
+    const select = document.getElementById('workOrderReviseSelect');
+    const selectedOption = select.options[select.selectedIndex];
+    if (!selectedOption || !selectedOption.value) {
+      alert('Please select a work order to revise');
+      return;
+    }
+    const workOrderNo = selectedOption.value;
+    google.script.run
+      .withSuccessHandler(function(response) {
+        if (response.success) {
+          populateFormWithOrderData(response);
+        } else {
+          alert('Error: ' + response.message);
+        }
+      })
+      .withFailureHandler(function(error) {
+        alert('Error loading work order: ' + error.message);
+      })
+      .getWorkOrderDetails(workOrderNo);
+  }
+
+  function setInputValue(selector, value) {
+    const el = document.querySelector(selector);
+    if (el && value !== undefined) el.value = value || '';
+  }
+  function setTextareaValue(selector, value) {
+    const el = document.querySelector(selector);
+    if (el && value !== undefined) el.value = value || '';
+  }
+  function setSelectValue(selector, value) {
+    const select = document.querySelector(selector);
+    if (!select || !value) return;
+    const options = Array.from(select.options);
+    const exact = options.find(o => o.value === value);
+    if (exact) { select.value = value; return; }
+    const ci = options.find(o => o.value.toLowerCase() === value.toLowerCase());
+    if (ci) select.value = ci.value;
+  }
+
+  // RESET FORM TO NEW ORDER MODE
+  function resetFormToNewOrder() {
+    document.getElementById('isRevision').value = 'false';
+    document.getElementById('oldOrderId').value = '';
+    document.getElementById('oldWorkOrderNo').value = '';
+    google.script.run.withSuccessHandler(function(woNumber) {
+      nextWorkOrderNumber = woNumber;
+      document.getElementById('workOrderNumberDisplay').textContent = woNumber;
+    }).getNextWorkOrderNumber();
+  }
+
+  // UPDATE CUSTOMER INFO
+  function updateCustomerInfo() {
+    const selectedName = document.getElementById("customerSelect").value;
+    const client = customerDatabase.find(c => c.name === selectedName);
+    if (client) {
+      document.getElementById("customerAddress").value     = client.address     || '';
+      document.getElementById("customerGst").value         = client.gst         || '';
+      document.getElementById("customerContactName").value = client.contactName || '';
+      document.getElementById("customerContactNo").value   = client.contactNo   || '';
+      document.getElementById("customerEmail").value       = client.email       || '';
+      document.getElementById("customerEmailCC").value     = client.emailCC     || '';
+      // If "same as above" is checked, sync consignee too
+      if (document.getElementById('sameAsAbove').checked) {
+        syncConsigneeFromCustomer();
+      }
+    }
+  }
+
+  // SAME AS ABOVE CHECKBOX
+  function toggleSameAsAbove() {
+    const checked = document.getElementById('sameAsAbove').checked;
+    const company = document.getElementById('consigneeCompany');
+    const addr = document.getElementById('consigneeAddr');
+    const gstin = document.getElementById('consigneeGstin');
+
+    if (checked) {
+      syncConsigneeFromCustomer();
+      company.disabled = true;
+      addr.disabled = true;
+      gstin.disabled = true;
+    } else {
+      company.value = '';
+      addr.value = '';
+      gstin.value = '';
+      company.disabled = false;
+      addr.disabled = false;
+      gstin.disabled = false;
+    }
+  }
+
+  function syncConsigneeFromCustomer() {
+    const selectedName = document.getElementById("customerSelect").value;
+    const client = customerDatabase.find(c => c.name === selectedName);
+    if (client) {
+      document.getElementById('consigneeCompany').value = client.name;
+      document.getElementById('consigneeAddr').value = client.address;
+      document.getElementById('consigneeGstin').value = client.gst;
+    } else {
+      document.getElementById('consigneeCompany').value = document.getElementById('customerGst').value ? selectedName : '';
+      document.getElementById('consigneeAddr').value = document.getElementById('customerAddress').value;
+      document.getElementById('consigneeGstin').value = document.getElementById('customerGst').value;
+    }
+  }
+
+  // CD CLAUSE TOGGLE
+  function toggleCDClause() {
+    const applicable = document.getElementById('cdApplicable').checked;
+    document.getElementById('cdValue').disabled = !applicable;
+    document.getElementById('cdPerWeek').disabled = !applicable;
+    document.getElementById('cdPerMonth').disabled = !applicable;
+    if (!applicable) {
+      document.getElementById('cdValue').value = '';
+      document.getElementById('cdPerWeek').checked = false;
+      document.getElementById('cdPerMonth').checked = false;
+    }
+  }
+
+  // ADVANCE % TOGGLE — only active for "Advance & Balance Against Proforma Invoice"
+  function toggleAdvanceField() {
+    const sel = document.getElementById('paymentTermsSelect');
+    const adv = document.getElementById('advancePercent');
+    const isAdvance = sel && sel.value === 'Advance & Balance Against Proforma Invoice';
+    adv.disabled = !isAdvance;
+    adv.style.background = isAdvance ? 'white' : 'var(--gray-100)';
+    if (!isAdvance) adv.value = '';
+  }
+
+  // TOGGLE NEW CUSTOMER FORM
+  function toggleNewCustomerForm() {
+    const section = document.getElementById('newCustomerSection');
+    if (!section.classList.contains('active')) {
+      section.style.display = 'block';
+      section.classList.add('active');
+    } else {
+      section.style.display = 'none';
+      section.classList.remove('active');
+    }
+  }
+
+  // ADD NEW CUSTOMER
+  function addNewCustomer() {
+    const nameInput        = document.getElementById('newCustName');
+    const gstInput         = document.getElementById('newCustGST');
+    const addressInput     = document.getElementById('newCustAddress');
+    const contactNameInput = document.getElementById('newCustContactName');
+    const contactNoInput   = document.getElementById('newCustContactNo');
+    const emailInput       = document.getElementById('newCustEmail');
+    const emailCCInput     = document.getElementById('newCustEmailCC');
+    const addBtn           = document.querySelector('#newCustomerSection .add-cust-btn');
+
+    const customerData = {
+      name:        nameInput.value.trim(),
+      gst:         gstInput.value.trim(),
+      address:     addressInput.value.trim(),
+      contactName: contactNameInput.value.trim(),
+      contactNo:   contactNoInput.value.trim(),
+      email:       emailInput.value.trim(),
+      emailCC:     emailCCInput.value.trim()
+    };
+
+    if (!customerData.name || !customerData.gst || !customerData.address) {
+      alert("Name, GST, and Address are required to add a new customer.");
+      return;
+    }
+
+    addBtn.textContent = 'Adding...';
+    addBtn.disabled = true;
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        alert(response.message);
+        if (response.success) {
+          google.script.run.withSuccessHandler(function(newData) {
+            populateDropdowns(newData);
+            nameInput.value        = '';
+            gstInput.value         = '';
+            addressInput.value     = '';
+            contactNameInput.value = '';
+            contactNoInput.value   = '';
+            emailInput.value       = '';
+            emailCCInput.value     = '';
+            toggleNewCustomerForm();
+          }).getCustomerData();
+        }
+        addBtn.textContent = 'Add to Database';
+        addBtn.disabled = false;
+      })
+      .addNewCustomerToDatabase(customerData);
+  }
+
+  // BUILD OPTIONS HTML from array
+  function buildOptions(arr, placeholder) {
+    let html = `<option value="" disabled selected>${placeholder}</option>`;
+    arr.forEach(v => { html += `<option value="${v.replace(/"/g,'&quot;')}">${v}</option>`; });
+    return html;
+  }
+
+  // UPDATE SHORT DESC + GRADE dropdowns when category changes
+  function onCategoryChange(selectEl) {
+    const productId = selectEl.dataset.productId;
+    const category = selectEl.value;
+    const shortEl = document.querySelector(`#product-${productId} .p-short`);
+    const gradeContainer = document.querySelector(`#product-${productId} .p-grade-container`);
+
+    // Determine which lists to use
+    let descs = [], grades = [], gradeIsText = false;
+    if (category === 'Stud link Chain') {
+      descs  = (productListData.studLink  || {}).descs  || [];
+      grades = (productListData.studLink  || {}).grades || [];
+    } else if (category === 'Anchor') {
+      descs  = (productListData.anchor    || {}).descs  || [];
+      grades = (productListData.anchor    || {}).grades || [];
+    } else if (category === 'Chains, Slings & Accessories') {
+      descs  = (productListData.chainSlings|| {}).descs  || [];
+      grades = (productListData.chainSlings|| {}).grades || [];
+    } else if (category === 'Elevator Conveyor') {
+      descs  = (productListData.elevator  || {}).descs  || [];
+      gradeIsText = true;
+    } else if (category === 'Miscellaneous') {
+      descs  = (productListData.misc      || {}).descs  || [];
+      gradeIsText = true;
+    }
+
+    // Rebuild Short Description dropdown
+    if (shortEl.tagName === 'SELECT') {
+      shortEl.innerHTML = buildOptions(descs, '-- Select Description --');
+    }
+
+    // Rebuild Grade: dropdown or text input
+    if (gradeIsText) {
+      gradeContainer.innerHTML = `<input type="text" class="p-grade" placeholder="Enter grade">`;
+    } else {
+      gradeContainer.innerHTML = `<select class="p-grade">${buildOptions(grades, '-- Select Grade --')}</select>`;
+    }
+  }
+
+  // ADD PRODUCT ROW
+  function addProductRow() {
+    if (productCount >= 20) { alert("Maximum 20 products allowed."); return; }
+    productCount++;
+    const container = document.getElementById("productContainer");
+    const div = document.createElement("div");
+    div.className = "product-card";
+    div.id = "product-" + productCount;
+    const pid = productCount;
+
+    // Default category is Stud link Chain
+    const defaultCategory = 'Stud link Chain';
+    const defaultDescs  = (productListData.studLink  || {}).descs  || [];
+    const defaultGrades = (productListData.studLink  || {}).grades || [];
+
+    div.innerHTML = `
+      <div class="product-header">
+        <div class="product-number">${pid}</div>
+        <div class="product-title">Product #${pid}</div>
+      </div>
+      <div class="form-row three-col">
+        <div class="form-field">
+          <label>Category/Product</label>
+          <select class="p-category" data-product-id="${pid}" onchange="onCategoryChange(this)">
+            <option value="Stud link Chain" selected>Stud link Chain</option>
+            <option value="Anchor">Anchor</option>
+            <option value="Chains, Slings &amp; Accessories">Chains, Slings &amp; Accessories</option>
+            <option value="Elevator Conveyor">Elevator Conveyor</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Size</label>
+          <input type="text" class="p-size">
+        </div>
+        <div class="form-field">
+          <label>Grade</label>
+          <div class="p-grade-container">
+            <select class="p-grade">${buildOptions(defaultGrades, '-- Select Grade --')}</select>
+          </div>
+        </div>
+      </div>
+      <div class="form-row two-col">
+        <div class="form-field">
+          <label>Short Description</label>
+          <select class="p-short">${buildOptions(defaultDescs, '-- Select Description --')}</select>
+        </div>
+        <div class="form-field">
+          <label>Long Description</label>
+          <textarea class="p-long" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="form-row three-col">
+        <div class="form-field">
+          <label>Unit</label>
+          <select class="p-unit">
+            <option value="Nos">Nos</option>
+            <option value="Kgs">Kgs</option>
+            <option value="Mtrs">Mtrs</option>
+            <option value="Sets">Sets</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Quantity</label>
+          <input type="number" class="p-qty" min="0">
+        </div>
+        <div class="form-field">
+          <label>Rate</label>
+          <input type="number" class="p-rate" min="0" step="0.01">
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  }
+
+  // HANDLE FORM SUBMIT
+  // --- OPTION STATE ---
+  let selectedRateOption = null; // 'draft' | 'approved' | 'skip'
+
+  function selectRateOption(option) {
+    selectedRateOption = option;
+    document.getElementById('cardDraft').classList.toggle('selected',    option === 'draft');
+    document.getElementById('cardApproved').classList.toggle('selected', option === 'approved');
+    document.getElementById('cardSkip').classList.toggle('selected',     option === 'skip');
+    document.getElementById('pdfConfirmBtn').disabled = false;
+  }
+
+  function handleFormSubmit(form) {
+    event.preventDefault();
+    let products = [];
+    for (let i = 1; i <= productCount; i++) {
+      let pDiv = document.getElementById("product-" + i);
+      if (pDiv) {
+        products.push({
+          category: pDiv.querySelector(".p-category").value || '',
+          size: pDiv.querySelector(".p-size").value || '',
+          grade: pDiv.querySelector(".p-grade").value || '',
+          short_desc: pDiv.querySelector(".p-short").value || '',
+          long_desc: pDiv.querySelector(".p-long").value || '',
+          unit: pDiv.querySelector(".p-unit").value || '',
+          qty: pDiv.querySelector(".p-qty").value || '',
+          rate: pDiv.querySelector(".p-rate").value || ''
+        });
+      }
+    }
+    document.getElementById("allProductsJSON").value = JSON.stringify(products);
+
+    // Disabled fields are excluded from form serialisation by the browser.
+    // If "Same as above" is ticked the consignee fields are disabled but have
+    // valid values — temporarily re-enable them so processForm receives them.
+    const sameChecked = document.getElementById('sameAsAbove').checked;
+    const consigneeIds = ['consigneeCompany', 'consigneeAddr', 'consigneeGstin'];
+    if (sameChecked) {
+      consigneeIds.forEach(id => { document.getElementById(id).disabled = false; });
+    }
+
+    // Same issue for Advance % (disabled unless Advance payment term selected)
+    const advEl = document.getElementById('advancePercent');
+    const advWasDisabled = advEl && advEl.disabled;
+    if (advWasDisabled) advEl.disabled = false;
+
+    // Same issue for CD clause sub-fields (disabled unless Applicable ticked)
+    const cdFields = ['cdValue', 'cdPerWeek', 'cdPerMonth'];
+    const cdWasDisabled = document.getElementById('cdValue') && document.getElementById('cdValue').disabled;
+    if (cdWasDisabled) {
+      cdFields.forEach(id => { const el = document.getElementById(id); if (el) el.disabled = false; });
+    }
+
+    pendingFormData = form;
+
+    // Re-disable immediately after (UI state unchanged for the user)
+    if (sameChecked) {
+      consigneeIds.forEach(id => { document.getElementById(id).disabled = true; });
+    }
+    if (advWasDisabled) advEl.disabled = true;
+    if (cdWasDisabled) {
+      cdFields.forEach(id => { const el = document.getElementById(id); if (el) el.disabled = true; });
+    }
+
+    // Reset modal card selection state
+    selectedRateOption = null;
+    document.getElementById('cardDraft').classList.remove('selected');
+    document.getElementById('cardApproved').classList.remove('selected');
+    document.getElementById('cardSkip').classList.remove('selected');
+    document.getElementById('pdfConfirmBtn').disabled = true;
+    showPDFModal();
+  }
+
+  function showPDFModal() { document.getElementById('pdfModal').classList.add('active'); }
+  function hidePDFModal() { document.getElementById('pdfModal').classList.remove('active'); }
+
+  function cancelPDFModal() {
+    hidePDFModal();
+    pendingFormData = null;
+    selectedRateOption = null;
+  }
+
+  function handlePDFConfirmation() {
+    if (!pendingFormData || !selectedRateOption) return;
+
+    document.getElementById('pdfConfirmBtn').disabled = true;
+    document.getElementById('pdfCancelBtn').disabled = true;
+
+    const form = pendingFormData;
+    const btn  = form.querySelector(".submit-btn");
+    const isRevision = document.getElementById('isRevision').value === 'true';
+    hidePDFModal();
+
+    // ── PRINT DRAFT ─────────────────────────────────────────────────
+    // Generate Office Copy preview from live form data.
+    // Do NOT save to sheet, do NOT clear the form.
+    if (selectedRateOption === 'draft') {
+      btn.textContent = 'Generating Draft...';
+      btn.disabled = true;
+
+      // Collect current form data into a plain object for the draft generator
+      const fd = collectFormDataForDraft(form);
+
+      google.script.run
+        .withSuccessHandler(function(response) {
+          btn.textContent = isRevision ? 'Update Work Order' : 'Generate Work Order';
+          btn.disabled = false;
+          enableModalButtons();
+          if (response.success && response.base64Pdf) {
+            // Convert base64 to a data URL and open it directly — no Drive needed
+            const dataUrl = 'data:application/pdf;base64,' + response.base64Pdf;
+            const newTab = window.open('', '_blank');
+            if (newTab) {
+              newTab.document.write(
+                '<html><head><title>Draft - Office Copy</title></head>' +
+                '<body style="margin:0;padding:0;">' +
+                '<embed width="100%" height="100%" src="' + dataUrl + '" type="application/pdf">' +
+                '</body></html>'
+              );
+              newTab.document.close();
+            } else {
+              // Fallback: create a temporary anchor and click it to download
+              const a = document.createElement('a');
+              a.href = dataUrl;
+              a.download = 'Draft_Office_Copy.pdf';
+              a.click();
+            }
+          } else {
+            alert('Draft PDF failed:\n' + (response.message || 'Unknown error'));
+          }
+          // Form is NOT reset — data stays for further editing
+        })
+        .withFailureHandler(function(error) {
+          btn.textContent = isRevision ? 'Update Work Order' : 'Generate Work Order';
+          btn.disabled = false;
+          enableModalButtons();
+          alert('Draft PDF failed:\n' + error.message);
+        })
+        .generateDraftPDF(fd);
+
+      return; // Don't proceed to processForm
+    }
+
+    // ── PRINT APPROVED or SAVE ONLY ─────────────────────────────────
+    // Both paths save to the sheet first.
+    btn.textContent = isRevision ? "Updating..." : "Processing...";
+    btn.disabled = true;
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        if (response.success) {
+          if (selectedRateOption === 'approved') {
+            generateAndSavePDF(response.orderId, response.workOrderNo, response, form, btn, isRevision);
+          } else {
+            // Save Only
+            showSuccessMessage(response, form, btn, isRevision);
+          }
+        } else {
+          alert('Error: ' + response.message);
+          resetSubmitButton(btn, isRevision);
+          enableModalButtons();
+        }
+      })
+      .withFailureHandler(function(error) {
+        alert('Error: ' + error.message);
+        resetSubmitButton(btn, isRevision);
+        enableModalButtons();
+      })
+      .processForm(form);
+  }
+
+  // Collect all form values into a plain object for generateDraftPDF
+  function collectFormDataForDraft(form) {
+    const fd = {};
+    // Standard named inputs / selects / textareas
+    const elements = form.elements;
+    for (let i = 0; i < elements.length; i++) {
+      const el = elements[i];
+      if (!el.name) continue;
+      if (el.type === 'checkbox') {
+        if (el.checked) {
+          if (fd[el.name]) {
+            fd[el.name] = fd[el.name] + ',' + el.value;
+          } else {
+            fd[el.name] = el.value;
+          }
+        }
+      } else if (el.type !== 'radio' || el.checked) {
+        fd[el.name] = el.value || '';
+      }
+    }
+    // Products JSON
+    fd.allProductsJSON = document.getElementById('allProductsJSON').value;
+    return fd;
+  }
+
+  // Print Approved: combined PDF saved to Drive, form cleared after
+  function generateAndSavePDF(orderId, workOrderNo, orderResponse, form, btn, isRevision) {
+    google.script.run
+      .withSuccessHandler(function(pdfResponse) {
+        const baseMsg = isRevision ? 'Work Order Updated Successfully!\n' : 'Work Order Generated Successfully!\n';
+        if (pdfResponse.success) {
+          alert(baseMsg +
+            'Order ID: ' + orderResponse.orderId + '\n' +
+            'Work Order No: ' + orderResponse.workOrderNo + '\n\n' +
+            '✅ Combined PDF saved to Drive:\n' + pdfResponse.pdfName + '\n\n' +
+            'Opening PDF in new tab for printing...');
+          // Open via base64 data URL — no Drive sharing permissions needed
+          if (pdfResponse.base64Pdf) {
+            const dataUrl = 'data:application/pdf;base64,' + pdfResponse.base64Pdf;
+            const newTab = window.open('', '_blank');
+            if (newTab) {
+              newTab.document.write(
+                '<html><head><title>' + pdfResponse.pdfName + '</title></head>' +
+                '<body style="margin:0;padding:0;">' +
+                '<embed width="100%" height="100%" src="' + dataUrl + '" type="application/pdf">' +
+                '</body></html>'
+              );
+              newTab.document.close();
+            } else {
+              // Fallback: download
+              const a = document.createElement('a');
+              a.href = dataUrl;
+              a.download = pdfResponse.pdfName || 'Work_Order.pdf';
+              a.click();
+            }
+          }
+        } else {
+          alert('Work order saved, but PDF failed:\n' + pdfResponse.message);
+        }
+        resetForm(form);
+        resetSubmitButton(btn, isRevision);
+        enableModalButtons();
+      })
+      .withFailureHandler(function(error) {
+        alert('Work order saved, but PDF failed:\n' + error.message);
+        resetForm(form);
+        resetSubmitButton(btn, isRevision);
+        enableModalButtons();
+      })
+      .generateWorkOrderPDF(orderId, workOrderNo, 'approved');
+  }
+
+  function showSuccessMessage(response, form, btn, isRevision) {
+    alert((isRevision ? 'Work Order Updated!' : 'Work Order Generated!') +
+      '\nOrder ID: ' + response.orderId + '\nWork Order No: ' + response.workOrderNo);
+    resetForm(form);
+    resetSubmitButton(btn, isRevision);
+    enableModalButtons();
+  }
+
+  // ── FULL FORM RESET ─────────────────────────────────────────────
+  function resetForm(form) {
+    // 1. Native reset (clears text inputs, selects, textarea, checkboxes)
+    form.reset();
+
+    // 2. Clear products
+    document.getElementById("productContainer").innerHTML = "";
+    productCount = 0;
+    addProductRow();
+
+    // 3. Switch back to New Order mode
+    document.querySelector('input[name="formMode"][value="new"]').checked = true;
+    document.getElementById('revisionSelector').classList.remove('active');
+    isRevisionMode = false;
+    document.querySelector('.submit-btn').textContent = 'Generate Work Order';
+
+    // 4. Clear hidden revision fields
+    document.getElementById('isRevision').value = 'false';
+    document.getElementById('oldOrderId').value = '';
+    document.getElementById('oldWorkOrderNo').value = '';
+
+    // 5. Re-enable & clear consignee fields (form.reset unchecks sameAsAbove but fields may still be disabled)
+    document.getElementById('sameAsAbove').checked = false;
+    ['consigneeCompany','consigneeAddr','consigneeGstin'].forEach(id => {
+      const el = document.getElementById(id);
+      el.disabled = false;
+      el.value = '';
+    });
+
+    // 6. Reset CD / LD clause (form.reset unchecked the box but toggleCDClause re-applies disabled state)
+    toggleCDClause();
+
+    // 7. Reset Advance % (form.reset clears value but doesn't re-disable)
+    const adv = document.getElementById('advancePercent');
+    if (adv) { adv.disabled = true; adv.style.background = 'var(--gray-100)'; adv.value = ''; }
+
+    // 8. Re-check permanently locked docs (form.reset unchecks them)
+    const invoice = document.getElementById('dwm_invoice');
+    const packing = document.getElementById('dwm_packing');
+    if (invoice) invoice.checked = true;
+    if (packing) packing.checked = true;
+
+    // 9. Close new-customer form if open
+    const newCustSec = document.getElementById('newCustomerSection');
+    if (newCustSec) { newCustSec.style.display = 'none'; newCustSec.classList.remove('active'); }
+
+    // 10. Refresh WO number and work order list
+    google.script.run.withSuccessHandler(function(woNumber) {
+      nextWorkOrderNumber = woNumber;
+      document.getElementById('workOrderNumberDisplay').textContent = woNumber;
+    }).getNextWorkOrderNumber();
+    google.script.run.withSuccessHandler(populateWorkOrderDropdown).getAllWorkOrderNumbers();
+
+    pendingFormData = null;
+    selectedRateOption = null;
+  }
+
+  // ── POPULATE FORM FOR REVISION ───────────────────────────────────
+  function populateFormWithOrderData(response) {
+    const orderData = response.orderData;
+    const products  = response.products;
+
+    // --- Hidden revision flags ---
+    document.getElementById('isRevision').value    = 'true';
+    document.getElementById('oldOrderId').value    = response.orderId;
+    document.getElementById('oldWorkOrderNo').value = orderData.workOrderNo;
+    document.getElementById('workOrderNumberDisplay').textContent = orderData.workOrderNo;
+
+    // --- §1 Customer ---
+    const custSel = document.getElementById('customerSelect');
+    custSel.value = orderData.customerName;
+    document.getElementById('customerGst').value          = orderData.customerGst          || '';
+    document.getElementById('customerAddress').value      = orderData.customerAddress      || '';
+    document.getElementById('customerContactName').value  = orderData.customerContactName  || '';
+    document.getElementById('customerContactNo').value    = orderData.customerContactNo    || '';
+    document.getElementById('customerEmail').value        = orderData.customerEmail        || '';
+    document.getElementById('customerEmailCC').value      = orderData.customerEmailCC      || '';
+
+    // --- §2 Work Order Details ---
+    setInputValue('input[name="workOrderDate"]', orderData.workOrderDate);
+    setInputValue('input[name="poNo"]',          orderData.poNo);
+    setInputValue('input[name="poDate"]',         orderData.poDate);
+    setInputValue('input[name="loiNo"]',          orderData.loiNo);
+    setInputValue('input[name="loiDate"]',        orderData.loiDate);
+
+    // --- §3 Delivery ---
+    setInputValue('input[name="deliveryDate"]', orderData.deliveryDate);
+    // deliveryTerms stored as plain value (e.g. "FOR"), deliveryTermsExtra stored separately
+    setSelectValue('select[name="deliveryTerms"]',      orderData.deliveryTerms);
+    setInputValue('input[name="deliveryTermsExtra"]',   orderData.deliveryTermsExtra);
+    setInputValue('input[name="nominatedTransporter"]', orderData.nominatedTransporter);
+    setSelectValue('select[name="transporterScope"]',   orderData.transporterScope);
+
+    // --- §4 Consignee --- (always fill manually; do not auto-tick "same as above")
+    document.getElementById('sameAsAbove').checked = false;
+    ['consigneeCompany','consigneeAddr','consigneeGstin'].forEach(id => {
+      document.getElementById(id).disabled = false;
+    });
+    setInputValue('#consigneeCompany',                    orderData.consigneeCompany);
+    setInputValue('#consigneeAddr',                       orderData.consigneeAddr);
+    setInputValue('#consigneeGstin',                      orderData.consigneeGstin);
+    setInputValue('input[name="consigneeContact"]',       orderData.consigneeContact);
+    setInputValue('input[name="consigneePhone"]',         orderData.consigneePhone);
+
+    // --- §5 Terms & Conditions ---
+    setSelectValue('select[name="paymentTerms"]', orderData.paymentTerms);
+    toggleAdvanceField();  // enable/disable advance % based on selection
+    const adv = document.getElementById('advancePercent');
+    if (adv) adv.value = orderData.advancePercent || '';
+    setInputValue('input[name="guaranteePeriod"]',        orderData.guaranteePeriod);
+    setTextareaValue('textarea[name="guaranteeClause"]',  orderData.guaranteeClause);
+
+    // Bank Guarantee
+    setInputValue('input[name="bgSecurityPct"]',    orderData.bgSecurityPct);
+    setInputValue('input[name="bgSecurityDate"]',   orderData.bgSecurityDate);
+    setInputValue('input[name="bgPerformancePct"]', orderData.bgPerformancePct);
+    setInputValue('input[name="bgPerformanceDate"]',orderData.bgPerformanceDate);
+
+    // LD / CD clause
+    const cdCb = document.getElementById('cdApplicable');
+    cdCb.checked = !!orderData.cdApplicable;
+    toggleCDClause();
+    if (orderData.cdApplicable) {
+      setInputValue('#cdValue', orderData.cdValue);
+      document.getElementById('cdPerWeek').checked  = !!orderData.cdPeriodWeek;
+      document.getElementById('cdPerMonth').checked = !!orderData.cdPeriodMonth;
+    }
+
+    // --- §6 Inspection ---
+    setSelectValue('select[name="pdi"]',          orderData.pdi);
+    setInputValue('input[name="pdiNote"]',        orderData.pdiNote);
+    // Clear all certification checkboxes first, then re-check saved ones
+    document.querySelectorAll('input[name="certifications"]').forEach(cb => { cb.checked = false; });
+    if (orderData.certifications && orderData.certifications.length) {
+      orderData.certifications.forEach(cert => {
+        const cb = Array.from(document.querySelectorAll('input[name="certifications"]'))
+                        .find(c => c.value === cert);
+        if (cb) cb.checked = true;
+      });
+    }
+
+    // --- §8 Additional Information ---
+    // Clear first, then re-check
+    document.querySelectorAll('input[name="docsEnclosed"]').forEach(cb => { cb.checked = false; });
+    if (orderData.docsEnclosed && orderData.docsEnclosed.length) {
+      orderData.docsEnclosed.forEach(doc => {
+        const cb = Array.from(document.querySelectorAll('input[name="docsEnclosed"]'))
+                        .find(c => c.value === doc);
+        if (cb) cb.checked = true;
+      });
+    }
+    document.querySelectorAll('input[name="approvalReq"]').forEach(cb => { cb.checked = false; });
+    if (orderData.approvalReq && orderData.approvalReq.length) {
+      orderData.approvalReq.forEach(app => {
+        const cb = Array.from(document.querySelectorAll('input[name="approvalReq"]'))
+                        .find(c => c.value === app);
+        if (cb) cb.checked = true;
+      });
+    }
+    setInputValue('input[name="sampleQty"]', orderData.sampleQty);
+    setTextareaValue('textarea[name="additionalNote"]', orderData.additionalNote);
+
+    // --- §9 Documents With Material ---
+    // Uncheck all optional ones first (leave Invoice & Packing List always checked)
+    document.querySelectorAll('input[name="docsWithMaterial"]').forEach(cb => {
+      if (cb.value !== 'Invoice' && cb.value !== 'Packing List') cb.checked = false;
+    });
+    if (orderData.docsWithMaterial && orderData.docsWithMaterial.length) {
+      orderData.docsWithMaterial.forEach(doc => {
+        if (doc === 'Invoice' || doc === 'Packing List') return;
+        const cb = Array.from(document.querySelectorAll('input[name="docsWithMaterial"]'))
+                        .find(c => c.value === doc);
+        if (cb) cb.checked = true;
+      });
+    }
+    // Ensure locked ones are always checked
+    const inv  = document.getElementById('dwm_invoice');
+    const pack = document.getElementById('dwm_packing');
+    if (inv)  inv.checked  = true;
+    if (pack) pack.checked = true;
+
+    // --- §7 Products ---
+    document.getElementById('productContainer').innerHTML = '';
+    productCount = 0;
+    if (products && products.length > 0) {
+      products.forEach(product => {
+        addProductRow();
+        const pDiv = document.getElementById('product-' + productCount);
+        if (!pDiv) return;
+        // Set category and trigger dependent dropdowns if the function exists
+        const catEl = pDiv.querySelector('.p-category');
+        if (catEl) {
+          catEl.value = product.category;
+          if (typeof onCategoryChange === 'function') onCategoryChange(catEl);
+        }
+        setElValue(pDiv, '.p-size',  product.size);
+        setElValue(pDiv, '.p-grade', product.grade);
+        setElValue(pDiv, '.p-short', product.short_desc);
+        setElValue(pDiv, '.p-long',  product.long_desc);
+        setElValue(pDiv, '.p-unit',  product.unit);
+        setElValue(pDiv, '.p-qty',   product.qty);
+        setElValue(pDiv, '.p-rate',  product.rate);
+      });
+    } else {
+      addProductRow();
+    }
+  }
+
+  // Helper: set value on element found within a parent
+  function setElValue(parent, selector, value) {
+    const el = parent.querySelector(selector);
+    if (el) el.value = value || '';
+  }
+
+  function resetSubmitButton(btn, isRevision) {
+    btn.textContent = isRevision ? "Update Work Order" : "Generate Work Order";
+    btn.disabled = false;
+  }
+
+  function enableModalButtons() {
+    document.getElementById('pdfConfirmBtn').disabled = false;
+    document.getElementById('pdfCancelBtn').disabled = false;
+  }
+</script>
+</body>
+</html>
